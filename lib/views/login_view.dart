@@ -88,6 +88,17 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
             ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+              },
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 20),
+                foregroundColor: Color.fromARGB(238, 46, 59, 65),
+              ),
+              child: const Text('New User? Register here'),
+            ),
           ],
         ),
       ),

@@ -90,6 +90,17 @@ class _RegistrationViewState extends State<RegistrationView> {
                 ),
               ),
             ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/login/', (route) => false);
+              },
+              style: TextButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 20),
+                foregroundColor: Color.fromARGB(238, 46, 59, 65),
+              ),
+              child: const Text('Not a new User? Login here'),
+            ),
           ],
         ),
       ),
