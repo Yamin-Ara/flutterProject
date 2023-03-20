@@ -18,6 +18,7 @@ void main() async {
       routes: {
         '/login/': (context) => LoginView(),
         '/register/': (context) => const RegistrationView(),
+        '/landing/': (context) => const landingView(),
       },
     ),
   );
@@ -66,7 +67,7 @@ class _landingViewState extends State<landingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
         actions: [
           PopupMenuButton<menuAction>(
             onSelected: (value) async {
