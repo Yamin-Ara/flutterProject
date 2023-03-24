@@ -95,6 +95,7 @@ class _landingViewState extends State<landingView> {
           ),
         ],
       ),
+      body: const Text("hello"),
     );
   }
 }
