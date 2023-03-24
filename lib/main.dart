@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application_1/controller/routes.dart';
 import 'package:flutter_application_1/views/login_view.dart';
 import 'package:flutter_application_1/views/register_view.dart';
 import 'package:flutter_application_1/views/verify_view.dart';
@@ -16,9 +17,10 @@ void main() async {
       ),
       home: const homePage(),
       routes: {
-        '/login/': (context) => LoginView(),
-        '/register/': (context) => const RegistrationView(),
-        '/landing/': (context) => const landingView(),
+        loginRoute: (context) => LoginView(),
+        registerRoute: (context) => const RegistrationView(),
+        landingRoute: (context) => const landingView(),
+        verifyEmailRoute: (context) => const verifyEmailView(),
       },
     ),
   );
@@ -47,7 +49,7 @@ class homePage extends StatelessWidget {
                 return LoginView();
               }
             default:
-              return const CircularProgressIndicator();
+              return const CircularProgressIndicator.adaptive();
           }
         });
   }
@@ -78,7 +80,7 @@ class _landingViewState extends State<landingView> {
                   if (doLogout) {
                     await FirebaseAuth.instance.signOut;
                     Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/login/', (_) => false);
+                        .pushNamedAndRemoveUntil(loginRoute, (_) => false);
                   }
               }
             },
@@ -109,7 +111,7 @@ Future<bool> showLogOutDialog(BuildContext context) {
             onPressed: () {
               Navigator.of(context).pop(false);
             },
-            child: Text('Concel'),
+            child: Text('Cancel'),
           ),
           TextButton(
             onPressed: () {

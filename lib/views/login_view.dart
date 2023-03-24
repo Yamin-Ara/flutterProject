@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
+
+import 'package:flutter_application_1/controller/routes.dart';
+
+import '../utillities/showError.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -30,7 +33,7 @@ class _LoginViewState extends State<LoginView> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.pink[50],
       appBar: AppBar(
-        title: Text('Health App Login'),
+        title: const Text('Health App Login'),
         centerTitle: true,
         backgroundColor: Colors.pink.shade100,
       ),
@@ -46,6 +49,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             TextFormField(
               controller: _password,
+              obscureText: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Password',
@@ -62,16 +66,24 @@ class _LoginViewState extends State<LoginView> {
                       email: email,
                       password: password,
                     );
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/landing/',
-                      (route) => false,
-                    );
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user?.emailVerified ?? false) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        landingRoute,
+                        (route) => false,
+                      );
+                    } else {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          verifyEmailRoute, (route) => false);
+                    }
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
-                      devtools.log("User not found");
+                      await showErrorDialog(context, "User not found");
                     } else {
-                      devtools.log(e.code);
+                      await showErrorDialog(context, e.code);
                     }
+                  } catch (e) {
+                    showErrorDialog(context, e.toString());
                   }
                   // const snackBar =
                   //     SnackBar(content: const Text('Sign up form coming soon'));
@@ -94,7 +106,7 @@ class _LoginViewState extends State<LoginView> {
             TextButton(
               onPressed: () {
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+                    .pushNamedAndRemoveUntil(registerRoute, (route) => false);
               },
               style: TextButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 20),
@@ -106,7 +118,19 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () async {
+          try {
+            await FirebaseAuth.instance
+                .sendPasswordResetEmail(email: _email.text);
+          } on FirebaseAuthException catch (e) {
+            if (e.code == "unknown") {
+              await showErrorDialog(
+                  context, "Please fill up the email text field");
+            } else {
+              await showErrorDialog(context, e.code);
+            }
+          }
+        },
         label: const Text('Forgot Password'),
         icon: const Icon(
           Icons.assistant,

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/controller/routes.dart';
 
 class verifyEmailView extends StatefulWidget {
   const verifyEmailView({super.key});
@@ -13,19 +14,47 @@ class _verifyEmailViewState extends State<verifyEmailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Verification Required'),
+        title: const Text('Verification Required'),
       ),
-      body: Column(
-        children: [
-          const Text('Please complete verification'),
-          TextButton(
-            onPressed: () async {
-              final user = FirebaseAuth.instance.currentUser;
-              await user?.sendEmailVerification();
-            },
-            child: const Text('send verification code'),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              "Check email to complete verification",
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+              ),
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            TextButton(
+              onPressed: () async {
+                final user = FirebaseAuth.instance.currentUser;
+                await user?.sendEmailVerification();
+              },
+              child: const Text(
+                'Click here to resend verification code',
+                textScaleFactor: 1.5,
+              ),
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(registerRoute, (route) => false);
+              },
+              child: const Text("Go back and log in"),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
+import 'package:flutter_application_1/controller/routes.dart';
+import '../utillities/showError.dart';
 
 class RegistrationView extends StatefulWidget {
   const RegistrationView({super.key});
@@ -32,7 +33,7 @@ class _RegistrationViewState extends State<RegistrationView> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.pink[50],
       appBar: AppBar(
-        title: Text('Health App Registration'),
+        title: const Text('Health App Registration'),
         centerTitle: true,
         backgroundColor: Colors.pink.shade100,
       ),
@@ -49,6 +50,7 @@ class _RegistrationViewState extends State<RegistrationView> {
             ),
             TextFormField(
               controller: _password,
+              obscureText: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Password',
@@ -60,18 +62,23 @@ class _RegistrationViewState extends State<RegistrationView> {
                   final email = _email.text;
                   final password = _password.text;
                   try {
-                    final UserCredential = await FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
+                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: email,
                       password: password,
                     );
-                    devtools.log(UserCredential.toString());
+                    final user = FirebaseAuth.instance.currentUser;
+                    await user?.sendEmailVerification();
+                    Navigator.of(context).pushNamed(
+                      verifyEmailRoute,
+                    );
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'weak-password') {
-                      devtools.log("weak password");
+                      await showErrorDialog(context, "weak password");
                     } else {
-                      devtools.log(e.code);
+                      await showErrorDialog(context, e.code);
                     }
+                  } catch (e) {
+                    await showErrorDialog(context, e.toString());
                   }
                   // const snackBar =
                   //     SnackBar(content: const Text('Sign up form coming soon'));
@@ -94,7 +101,7 @@ class _RegistrationViewState extends State<RegistrationView> {
             TextButton(
               onPressed: () {
                 Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/login/', (route) => false);
+                    .pushNamedAndRemoveUntil(loginRoute, (route) => false);
               },
               style: TextButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 20),
@@ -104,16 +111,6 @@ class _RegistrationViewState extends State<RegistrationView> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: const Text('Forgot Password'),
-        icon: const Icon(
-          Icons.assistant,
-          color: Colors.amber,
-          size: 30.0,
-        ),
-        backgroundColor: Colors.purple,
       ),
     );
   }
