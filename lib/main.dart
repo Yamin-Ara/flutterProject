@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_application_1/controller/routes.dart';
+import 'package:flutter_application_1/services/auth/auth_service.dart';
+import 'package:flutter_application_1/views/landingView.dart';
 import 'package:flutter_application_1/views/login_view.dart';
 import 'package:flutter_application_1/views/register_view.dart';
 import 'package:flutter_application_1/views/verify_view.dart';
-import 'firebase_options.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:developer' as devtools show log;
 
 void main() async {
   runApp(
@@ -17,10 +15,10 @@ void main() async {
       ),
       home: const homePage(),
       routes: {
-        loginRoute: (context) => LoginView(),
         registerRoute: (context) => const RegistrationView(),
-        landingRoute: (context) => const landingView(),
         verifyEmailRoute: (context) => const verifyEmailView(),
+        loginRoute: (context) => LoginView(),
+        landingRoute: (context) => const landingView(),
       },
     ),
   );
@@ -32,15 +30,13 @@ class homePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Firebase.initializeApp(
-          options: DefaultFirebaseOptions.currentPlatform,
-        ),
+        future: AuthService.firebase().initialize(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              final user = FirebaseAuth.instance.currentUser;
+              final user = AuthService.firebase().currentUser;
               if (user != null) {
-                if (user.emailVerified) {
+                if (user.isEmailVerified) {
                   return const landingView();
                 } else {
                   return const verifyEmailView();
@@ -53,75 +49,4 @@ class homePage extends StatelessWidget {
           }
         });
   }
-}
-
-enum menuAction { logout }
-
-class landingView extends StatefulWidget {
-  const landingView({super.key});
-
-  @override
-  State<landingView> createState() => _landingViewState();
-}
-
-class _landingViewState extends State<landingView> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: [
-          PopupMenuButton<menuAction>(
-            onSelected: (value) async {
-              switch (value) {
-                case menuAction.logout:
-                  final doLogout = await showLogOutDialog(context);
-                  devtools.log(doLogout.toString());
-                  if (doLogout) {
-                    await FirebaseAuth.instance.signOut;
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil(loginRoute, (_) => false);
-                  }
-              }
-            },
-            itemBuilder: (context) {
-              return const [
-                PopupMenuItem<menuAction>(
-                  value: menuAction.logout,
-                  child: Text('logout'),
-                ),
-              ];
-            },
-          ),
-        ],
-      ),
-      body: const Text("hello"),
-    );
-  }
-}
-
-Future<bool> showLogOutDialog(BuildContext context) {
-  return showDialog<bool>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Sign out ?'),
-        content: const Text('Sure you want to log out?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: Text('log out'),
-          ),
-        ],
-      );
-    },
-  ).then((value) => value ?? false);
 }

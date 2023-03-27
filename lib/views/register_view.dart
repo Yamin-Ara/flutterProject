@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controller/routes.dart';
-import '../utillities/showError.dart';
+import 'package:flutter_application_1/services/auth/auth_exceptions.dart';
+import 'package:flutter_application_1/services/auth/auth_service.dart';
+import 'package:flutter_application_1/utillities/showError.dart';
 
 class RegistrationView extends StatefulWidget {
   const RegistrationView({super.key});
@@ -23,6 +24,7 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   @override
   void dispose() {
+    super.dispose();
     _email.dispose();
     _password.dispose();
   }
@@ -41,6 +43,9 @@ class _RegistrationViewState extends State<RegistrationView> {
         child: Column(
           children: [
             aboutSection,
+            SizedBox(
+              height: 2.0,
+            ),
             TextFormField(
               controller: _email,
               decoration: const InputDecoration(
@@ -48,9 +53,12 @@ class _RegistrationViewState extends State<RegistrationView> {
                 hintText: 'Email',
               ),
             ),
+            SizedBox(
+              height: 2.0,
+            ),
             TextFormField(
               controller: _password,
-              obscureText: true,
+              obscureText: false,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Password',
@@ -62,24 +70,18 @@ class _RegistrationViewState extends State<RegistrationView> {
                   final email = _email.text;
                   final password = _password.text;
                   try {
-                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                      email: email,
-                      password: password,
-                    );
-                    final user = FirebaseAuth.instance.currentUser;
-                    await user?.sendEmailVerification();
+                    await AuthService.firebase()
+                        .createUser(email: email, password: password);
+                    AuthService.firebase().sendEmailVerification();
                     Navigator.of(context).pushNamed(
                       verifyEmailRoute,
                     );
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'weak-password') {
-                      await showErrorDialog(context, "weak password");
-                    } else {
-                      await showErrorDialog(context, e.code);
-                    }
-                  } catch (e) {
-                    await showErrorDialog(context, e.toString());
+                  } on WeakPasswordAuthException {
+                    await showErrorDialog(context, "weak password");
+                  } on OtherAuthException {
+                    await showErrorDialog(context, "Registration Error");
                   }
+
                   // const snackBar =
                   //     SnackBar(content: const Text('Sign up form coming soon'));
                   // ScaffoldMessenger.of(context).showSnackBar(snackBar);

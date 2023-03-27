@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_application_1/controller/routes.dart';
-
-import '../utillities/showError.dart';
+import 'package:flutter_application_1/services/auth/auth_exceptions.dart';
+import 'package:flutter_application_1/services/auth/auth_service.dart';
+import 'package:flutter_application_1/utillities/showError.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -23,6 +22,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void dispose() {
+    super.dispose();
     _email.dispose();
     _password.dispose();
   }
@@ -49,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             TextFormField(
               controller: _password,
-              obscureText: true,
+              obscureText: false,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Password',
@@ -62,29 +62,25 @@ class _LoginViewState extends State<LoginView> {
                   final password = _password.text;
 
                   try {
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(
-                      email: email,
-                      password: password,
-                    );
-                    final user = FirebaseAuth.instance.currentUser;
-                    if (user?.emailVerified ?? false) {
+                    AuthService.firebase()
+                        .login(email: email, password: password);
+                    final user = AuthService.firebase().currentUser;
+                    if (user?.isEmailVerified ?? false) {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         landingRoute,
                         (route) => false,
                       );
                     } else {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          verifyEmailRoute, (route) => false);
+                      Navigator.of(context).pushNamed(verifyEmailRoute);
                     }
-                  } on FirebaseAuthException catch (e) {
-                    if (e.code == 'user-not-found') {
-                      await showErrorDialog(context, "User not found");
-                    } else {
-                      await showErrorDialog(context, e.code);
-                    }
-                  } catch (e) {
-                    showErrorDialog(context, e.toString());
+                  } on UserNotFoundAuthException {
+                    await showErrorDialog(context, "User not found");
+                  } on WrongPasswordAuthException {
+                    await showErrorDialog(context, "Wrong Password");
+                  } on OtherAuthException {
+                    await showErrorDialog(context, "Authentication Error");
                   }
+
                   // const snackBar =
                   //     SnackBar(content: const Text('Sign up form coming soon'));
                   // ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -114,30 +110,26 @@ class _LoginViewState extends State<LoginView> {
               ),
               child: const Text('New User? Register here'),
             ),
+            FloatingActionButton.extended(
+              onPressed: () async {
+                final email = _email.text;
+                try {
+                  await AuthService.firebase().passwordReset(email: email);
+                } on UnknownAuthException {
+                  await showErrorDialog(
+                      context, "Please fill up the email text field");
+                }
+              },
+              label: const Text('Forgot Password'),
+              icon: const Icon(
+                Icons.assistant,
+                color: Colors.amber,
+                size: 30.0,
+              ),
+              backgroundColor: Colors.purple,
+            ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          try {
-            await FirebaseAuth.instance
-                .sendPasswordResetEmail(email: _email.text);
-          } on FirebaseAuthException catch (e) {
-            if (e.code == "unknown") {
-              await showErrorDialog(
-                  context, "Please fill up the email text field");
-            } else {
-              await showErrorDialog(context, e.code);
-            }
-          }
-        },
-        label: const Text('Forgot Password'),
-        icon: const Icon(
-          Icons.assistant,
-          color: Colors.amber,
-          size: 30.0,
-        ),
-        backgroundColor: Colors.purple,
       ),
     );
   }
