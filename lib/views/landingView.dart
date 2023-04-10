@@ -20,7 +20,7 @@ class _landingViewState extends State<landingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Heathcare App'),
         backgroundColor: const Color.fromARGB(253, 62, 33, 76),
         actions: [
           PopupMenuButton<menuAction>(
@@ -74,9 +74,7 @@ class _landingViewState extends State<landingView> {
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
-      body: Column(children: [
-        _pageList.elementAt(_selectedIndex),
-      ]),
+      body: _pageList.elementAt(_selectedIndex),
     );
   }
 

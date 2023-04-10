@@ -50,7 +50,7 @@ class _verifyEmailViewState extends State<verifyEmailView> {
                 Navigator.of(context)
                     .pushNamedAndRemoveUntil(registerRoute, (route) => false);
               },
-              child: const Text("Go back and log in"),
+              child: const Text("Restart"),
             )
           ],
         ),
