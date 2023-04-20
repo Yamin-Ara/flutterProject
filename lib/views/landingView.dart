@@ -3,7 +3,7 @@ import 'package:flutter_application_1/controller/routes.dart';
 import 'package:flutter_application_1/services/auth/auth_service.dart';
 import 'package:flutter_application_1/enums/menu_actions.dart';
 import 'package:flutter_application_1/views/nav/emergencyContacts_view.dart';
-import 'package:flutter_application_1/views/nav/home_view.dart';
+import 'package:flutter_application_1/views/nav/home/home_view.dart';
 import 'package:flutter_application_1/views/nav/reminder_view.dart';
 import 'package:flutter_application_1/views/nav/video_view.dart';
 

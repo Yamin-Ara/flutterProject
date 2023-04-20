@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_application_1/views/nav/home/waterIntake.dart';
 
 class VideoView extends StatefulWidget {
   const VideoView({super.key});
@@ -12,6 +11,6 @@ class VideoView extends StatefulWidget {
 class _VideoViewState extends State<VideoView> {
   @override
   Widget build(BuildContext context) {
-    return const Text('videos');
+    return Container();
   }
 }

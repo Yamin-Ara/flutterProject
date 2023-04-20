@@ -3,7 +3,7 @@ import 'package:flutter_application_1/controller/routes.dart';
 import 'package:flutter_application_1/services/auth/auth_service.dart';
 import 'package:flutter_application_1/services/cloud/cloud_notes.dart';
 import 'package:flutter_application_1/services/cloud/cloud_store.dart';
-import 'package:flutter_application_1/views/nav/notes_list_view.dart';
+import 'package:flutter_application_1/views/nav/home/notes_list_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -28,6 +28,19 @@ class _HomeViewState extends State<HomeView> {
       mainAxisSize: MainAxisSize.min,
       children: [
         ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(waterIntakeRoute);
+            },
+            child: const Text("Check Water Intake")),
+        const Text(
+          "Mood Notes",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        ),
+        ElevatedButton(
+          style: const ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll<Color>(
+                Color.fromARGB(253, 62, 33, 76)),
+          ),
           onPressed: () {
             Navigator.of(context).pushNamed(createUpdateUserInfoRoute);
           },

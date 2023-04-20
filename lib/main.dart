@@ -3,7 +3,8 @@ import 'package:flutter_application_1/controller/routes.dart';
 import 'package:flutter_application_1/services/auth/auth_service.dart';
 import 'package:flutter_application_1/views/landingView.dart';
 import 'package:flutter_application_1/views/login_view.dart';
-import 'package:flutter_application_1/views/nav/createUpdateUserInfo.dart';
+import 'package:flutter_application_1/views/nav/home/createUpdateUserInfo.dart';
+import 'package:flutter_application_1/views/nav/home/waterIntake.dart';
 import 'package:flutter_application_1/views/register_view.dart';
 import 'package:flutter_application_1/views/verify_view.dart';
 
@@ -22,6 +23,7 @@ void main() async {
         landingRoute: (context) => const landingView(),
         createUpdateUserInfoRoute: (context) =>
             const createUpdateUserInfoView(),
+        waterIntakeRoute: (context) => const WaterIntake(),
       },
     ),
   );
@@ -48,7 +50,7 @@ class homePage extends StatelessWidget {
                 return LoginView();
               }
             default:
-              return const CircularProgressIndicator.adaptive();
+              return const CircularProgressIndicator();
           }
         });
   }

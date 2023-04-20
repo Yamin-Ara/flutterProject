@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_application_1/services/auth/auth_service.dart';
 import 'package:flutter_application_1/services/cloud/cloud_notes.dart';
 import 'package:flutter_application_1/services/cloud/cloud_store.dart';
@@ -93,7 +91,7 @@ class _createUpdateUserInfoViewState extends State<createUpdateUserInfoView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("new"),
+        title: const Text("New Mood Note"),
       ),
       body: FutureBuilder(
         future: createOrGetExistingNote(context),
@@ -105,8 +103,8 @@ class _createUpdateUserInfoViewState extends State<createUpdateUserInfoView> {
                 controller: _textController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-                decoration: InputDecoration(
-                  hintText: "Enter text",
+                decoration: const InputDecoration(
+                  hintText: "How are you feeling today?",
                 ),
               );
             default:
