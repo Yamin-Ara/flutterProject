@@ -4,7 +4,8 @@ import 'package:flutter_application_1/services/auth/auth_service.dart';
 import 'package:flutter_application_1/views/landingView.dart';
 import 'package:flutter_application_1/views/login_view.dart';
 import 'package:flutter_application_1/views/nav/home/createUpdateUserInfo.dart';
-import 'package:flutter_application_1/views/nav/home/waterIntake.dart';
+import 'package:flutter_application_1/views/nav/home/pedometerView.dart';
+import 'package:flutter_application_1/views/nav/home/waterIntakeView.dart';
 import 'package:flutter_application_1/views/register_view.dart';
 import 'package:flutter_application_1/views/verify_view.dart';
 
@@ -24,6 +25,7 @@ void main() async {
         createUpdateUserInfoRoute: (context) =>
             const createUpdateUserInfoView(),
         waterIntakeRoute: (context) => const WaterIntake(),
+        showPedometerRoute: (context) => PedometerView(),
       },
     ),
   );

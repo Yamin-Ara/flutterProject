@@ -38,6 +38,9 @@ dependencies:
   firebase_core: ^2.8.0
   firebase_auth: ^4.3.0
   cloud_firestore: ^4.4.5
+  pedometer: ^3.0.0
+  location: ^4.2.0
+  video_player: ^2.6.1
 
 
 dev_dependencies:

@@ -32,6 +32,11 @@ class _HomeViewState extends State<HomeView> {
               Navigator.of(context).pushNamed(waterIntakeRoute);
             },
             child: const Text("Check Water Intake")),
+        ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(showPedometerRoute);
+            },
+            child: const Text("Check Steps Count")),
         const Text(
           "Mood Notes",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
