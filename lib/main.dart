@@ -6,6 +6,7 @@ import 'package:flutter_application_1/views/login_view.dart';
 import 'package:flutter_application_1/views/nav/home/createUpdateUserInfo.dart';
 import 'package:flutter_application_1/views/nav/home/pedometerView.dart';
 import 'package:flutter_application_1/views/nav/home/waterIntakeView.dart';
+import 'package:flutter_application_1/views/nav/reminders/createUpdateReminders.dart';
 import 'package:flutter_application_1/views/register_view.dart';
 import 'package:flutter_application_1/views/verify_view.dart';
 
@@ -14,8 +15,9 @@ void main() async {
     MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
       ),
+      debugShowCheckedModeBanner: false,
       home: const homePage(),
       routes: {
         registerRoute: (context) => const RegistrationView(),
@@ -26,6 +28,8 @@ void main() async {
             const createUpdateUserInfoView(),
         waterIntakeRoute: (context) => const WaterIntake(),
         showPedometerRoute: (context) => PedometerView(),
+        createUpdateRemindersRoute: (context) =>
+            const createUpdateReminderView(),
       },
     ),
   );

@@ -35,7 +35,8 @@ class _LoginViewState extends State<LoginView> {
       appBar: AppBar(
         title: const Text('Health App Login'),
         centerTitle: true,
-        backgroundColor: Colors.pink.shade100,
+        backgroundColor: Colors.purple,
+        titleTextStyle: TextStyle(color: Colors.amber),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -49,7 +50,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             TextFormField(
               controller: _password,
-              obscureText: false,
+              obscureText: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Password',
@@ -86,15 +87,15 @@ class _LoginViewState extends State<LoginView> {
                   // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.pinkAccent[100],
+                  backgroundColor: Colors.purple,
                 ),
                 child: const Text(
                   'Log in',
                   style: TextStyle(
-                    fontSize: 24.0,
+                    fontSize: 20.0,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
-                    color: Colors.black,
+                    color: Colors.amber,
                   ),
                 ),
               ),

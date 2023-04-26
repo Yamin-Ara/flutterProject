@@ -5,3 +5,4 @@ const verifyEmailRoute = '/verifyEmail/';
 const createUpdateUserInfoRoute = '/userInfo/';
 const waterIntakeRoute = '/waterIntake/';
 const showPedometerRoute = '/pedometer/';
+const createUpdateRemindersRoute = '/reminder/';

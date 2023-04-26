@@ -33,11 +33,11 @@ class _RegistrationViewState extends State<RegistrationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.pink[50],
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
         title: const Text('Health App Registration'),
         centerTitle: true,
-        backgroundColor: Colors.pink.shade100,
+        backgroundColor: Color.fromARGB(253, 62, 33, 76),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -58,7 +58,7 @@ class _RegistrationViewState extends State<RegistrationView> {
             ),
             TextFormField(
               controller: _password,
-              obscureText: false,
+              obscureText: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Password',
@@ -87,7 +87,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                   // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.pinkAccent[100],
+                  primary: Colors.amberAccent,
                 ),
                 child: const Text(
                   'Sign up',
